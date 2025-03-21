@@ -16,6 +16,17 @@ https://discord.gg/CR7s2aEf9T
 - **Server Statistics**: Track member joins, leaves, and activity over time
 - **Custom Prefix**: Set a custom command prefix for your server
 - **Event Announcements**: Celebrate member milestones and anniversaries
+<details>
+  <summary>Dashboard</summary>
+
+  ```
+![image](https://github.com/user-attachments/assets/ae396bdc-6b70-4379-a910-f5d36a0a0797)
+![image](https://github.com/user-attachments/assets/9d6dd51a-0c30-4bf7-92a4-f135862544c4)
+![image](https://github.com/user-attachments/assets/894b24bc-c6e4-4aee-b505-28a279908c65)
+
+  ```
+</details>
+
 
 ## Dashboard
 
