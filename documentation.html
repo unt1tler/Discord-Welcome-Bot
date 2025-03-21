@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discord Welcome & Leave Bot Documentation</title>
+  <style>
+    :root {
+      --primary: #5865F2;
+      --primary-dark: #4752c4;
+      --primary-light: #8991f5;
+      --success: #43B581;
+      --danger: #F04747;
+      --warning: #FAA61A;
+      --dark: #2C2F33;
+      --darker: #23272A;
+      --light: #f6f6f7;
+      --gray: #99AAB5;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: var(--light);
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 3rem 0;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    header h1 {
+      font-size: 2.8rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+    
+    header p {
+      font-size: 1.3rem;
+      opacity: 0.9;
+      max-width: 700px;
+    }
+    
+    nav {
+      background-color: var(--darker);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    nav ul {
+      display: flex;
+      list-style: none;
+      padding: 0;
+    }
+    
+    nav ul li {
+      padding: 1rem;
+    }
+    
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+      font-size: 1.05rem;
+    }
+    
+    nav ul li a:hover {
+      color: var(--primary-light);
+    }
+    
+    section {
+      margin-bottom: 3rem;
+      padding: 2.5rem;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+    
+    h2 {
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 2px solid var(--primary-light);
+      font-size: 2rem;
+    }
+    
+    h3 {
+      color: var(--dark);
+      margin: 1.8rem 0 1rem;
+      font-size: 1.5rem;
+    }
+    
+    p {
+      margin-bottom: 1rem;
+      font-size: 1.05rem;
+    }
+    
+    code {
+      font-family: 'Courier New', Courier, monospace;
+      background-color: #f4f4f4;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      color: var(--primary-dark);
+    }
+    
+    pre {
+      background-color: var(--darker);
+      color: white;
+      padding: 1.2rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1.2rem 0;
+      font-size: 0.95rem;
+    }
+    
+    pre code {
+      background-color: transparent;
+      color: white;
+      padding: 0;
+    }
+    
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    
+    .feature-card {
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      padding: 1.8rem;
+      border-left: 4px solid var(--primary);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+    
+    .feature-card h4 {
+      color: var(--primary);
+      margin-bottom: 0.8rem;
+      font-size: 1.2rem;
+    }
+    
+    .command-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .command-table th, .command-table td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .command-table th {
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+      color: white;
+      font-weight: 600;
+    }
+    
+    .command-table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    
+    .command-table tr:hover {
+      background-color: #f0f0f0;
+    }
+    
+    .tag {
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      margin-right: 0.5rem;
+      text-transform: uppercase;
+    }
+    
+    .tag-slash {
+      background-color: var(--primary);
+      color: white;
+    }
+    
+    .tag-prefix {
+      background-color: var(--warning);
+      color: white;
+    }
+    
+    .tag-admin {
+      background-color: var(--danger);
+      color: white;
+    }
+    
+    footer {
+      background: linear-gradient(135deg, var(--darker), #1a1d20);
+      color: white;
+      padding: 3rem 0;
+      text-align: center;
+      margin-top: 4rem;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 0.7rem 1.5rem;
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
+      margin: 0.5rem;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(88, 101, 242, 0.4);
+    }
+    
+    .note {
+      background-color: #e8f4fd;
+      border-left: 4px solid #2196f3;
+      padding: 1.2rem;
+      margin: 1.5rem 0;
+      border-radius: 6px;
+    }
+    
+    .warning {
+      background-color: #fff8e1;
+      border-left: 4px solid #ffc107;
+      padding: 1.2rem;
+      margin: 1.5rem 0;
+      border-radius: 6px;
+    }
+    
+    .hero-buttons {
+      margin-top: 1.5rem;
+    }
+    
+    .section-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .section-icon {
+      font-size: 2rem;
+      margin-right: 1rem;
+      color: var(--primary);
+    }
+    
+    @media (max-width: 768px) {
+      nav ul {
+        flex-direction: column;
+      }
+      
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      header h1 {
+        font-size: 2.2rem;
+      }
+      
+      header p {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Discord Welcome & Leave Bot</h1>
+      <p>Advanced customizable welcome and leave messages for your Discord servers</p>
+      <div class="hero-buttons">
+        <a href="#installation" class="btn">Get Started</a>
+        <a href="#commands" class="btn">View Commands</a>
+      </div>
+    </div>
+  </header>
+  
+  <nav>
+    <div class="container">
+      <ul>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#configuration">Configuration</a></li>
+        <li><a href="#commands">Commands</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#customization">Customization</a></li>
+        <li><a href="#variables">Variables</a></li>
+        <li><a href="#troubleshooting">Troubleshooting</a></li>
+        <li><a href="#real-data">Real Data Setup</a></li>
+      </ul>
+    </div>
+  </nav>
+  
+  <div class="container">
+    <section id="installation">
+      <div class="section-header">
+        <div class="section-icon">🚀</div>
+        <h2>Installation</h2>
+      </div>
+      <p>Follow these steps to set up the Discord Welcome & Leave Bot on your servers:</p>
+      
+      <h3>Prerequisites</h3>
+      <ul>
+        <li>Node.js 16.9.0 or higher</li>
+        <li>Discord.js v14</li>
+        <li>A Discord bot token (from Discord Developer Portal)</li>
+        <li>MongoDB database (local or Atlas)</li>
+      </ul>
+      
+      <h3>Step 1: Clone the Repository</h3>
+      <pre><code>git clone https://github.com/yourusername/discord-welcome-bot.git
+cd discord-welcome-bot</code></pre>
+      
+      <h3>Step 2: Install Dependencies</h3>
+      <pre><code>npm run install:all</code></pre>
+      
+      <h3>Step 3: Set Up Environment Variables</h3>
+      <p>Create two <code>.env</code> files:</p>
+      <ol>
+        <li>In the root directory (for the bot)</li>
+        <li>In the dashboard directory (for the web dashboard)</li>
+      </ol>
+      
+      <p>You can copy the example files:</p>
+      <pre><code>cp .env.example .env
+cp dashboard/.env.example dashboard/.env</code></pre>
+      
+      <h3>Step 4: Configure the Bot Environment Variables</h3>
+      <p>Edit the <code>.env</code> file in the root directory:</p>
+      <pre><code># Discord Bot Configuration
+# Required settings
+DISCORD_BOT_TOKEN=your_bot_token_here
+DISCORD_CLIENT_ID=your_client_id_here
+DISCORD_CLIENT_SECRET=your_client_secret_here
+DISCORD_GUILD_ID=your_guild_id_here
+
+# Database settings (MongoDB) - REQUIRED FOR REAL DATA
+USE_DATABASE=true
+MONGODB_URI=mongodb://localhost:27017/discordbot
+MONGODB_DB_NAME=discordbot
+
+# Rate limiting with Upstash Redis (optional but recommended)
+UPSTASH_REDIS_REST_URL=your_upstash_redis_url
+UPSTASH_REDIS_REST_TOKEN=your_upstash_redis_token
+
+# Dashboard settings
+DASHBOARD_ENABLED=true
+DASHBOARD_PORT=3000
+
+# NextAuth settings
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_random_secret_string_here</code></pre>
+      
+      <h3>Step 5: Configure the Dashboard Environment Variables</h3>
+      <p>Edit the <code>.env</code> file in the dashboard directory:</p>
+      <pre><code># Discord OAuth2 for Dashboard
+DISCORD_CLIENT_ID=your_client_id_here
+DISCORD_CLIENT_SECRET=your_client_secret_here
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_random_secret_string_here
+
+# Database settings (MongoDB) - REQUIRED FOR REAL DATA
+MONGODB_URI=mongodb://localhost:27017/discordbot
+MONGODB_DB_NAME=discordbot
+
+# Bot API settings (for communication between dashboard and bot)
+BOT_API_URL=http://localhost:3001/api
+BOT_API_TOKEN=your_bot_api_token_here
+
+# Public variables (accessible in browser)
+NEXT_PUBLIC_DISCORD_CLIENT_ID=your_client_id_here</code></pre>
+      
+      <h3>Step 6: Setting Up MongoDB</h3>
+      <p>You have two options for MongoDB:</p>
+      
+      <h4>Option 1: Local MongoDB</h4>
+      <ol>
+        <li>Install MongoDB on your system</li>
+        <li>Start the MongoDB service</li>
+        <li>Use <code>mongodb://localhost:27017/discordbot</code> as your connection string</li>
+      </ol>
+      
+      <h4>Option 2: MongoDB Atlas (Cloud)</h4>
+      <ol>
+        <li>Create a free account at <a href="https://www.mongodb.com/cloud/atlas" target="_blank">MongoDB Atlas</a></li>
+        <li>Create a new cluster</li>
+        <li>Set up a database user with password</li>
+        <li>Configure network access (IP whitelist)</li>
+        <li>Get your connection string from the "Connect" button</li>
+        <li>Replace <code>&lt;username&gt;</code> and <code>&lt;password&gt;</code> with your database user credentials</li>
+      </ol>
+      
+      <pre><code>MONGODB_URI=mongodb+srv://&lt;username&gt;:&lt;password&gt;@cluster0.example.mongodb.net/discordbot?retryWrites=true&w=majority</code></pre>
+      
+      <h3>Step 7: Deploy Slash Commands</h3>
+      <pre><code>npm run deploy</code></pre>
+      
+      <h3>Step 8: Start the Bot and Dashboard</h3>
+      <p>You can start both the bot and dashboard with a single command:</p>
+      <pre><code>npm run start:unified</code></pre>
+      
+      <p>Or start them separately:</p>
+      <pre><code># Start the bot
+npm start
+
+# Start the dashboard (in another terminal)
+npm run dashboard</code></pre>
+      
+      <div class="note">
+        <p><strong>Note:</strong> Make sure your bot has the necessary permissions in your Discord servers, including:</p>
+        <ul>
+          <li>Read Messages/View Channels</li>
+          <li>Send Messages</li>
+          <li>Embed Links</li>
+          <li>Manage Roles (if using role assignment features)</li>
+        </ul>
+      </div>
+    </section>
+    
+    <section id="real-data">
+      <div class="section-header">
+        <div class="section-icon">📊</div>
+        <h2>Real Data Setup</h2>
+      </div>
+      <p>To ensure your dashboard shows real data instead of mock data, follow these steps carefully:</p>
+      
+      <h3>1. MongoDB Setup (Required)</h3>
+      <p>Real data tracking requires MongoDB to be properly configured:</p>
+      <ul>
+        <li>Make sure MongoDB is installed and running</li>
+        <li>Set <code>USE_DATABASE=true</code> in your <code>.env</code> file</li>
+        <li>Verify your <code>MONGODB_URI</code> is correct in both <code>.env</code> files</li>
+      </ul>
+      
+      <div class="warning">
+        <p><strong>Important:</strong> The dashboard will show mock data if MongoDB is not properly connected!</p>
+      </div>
+      
+      <h3>2. Data Collection</h3>
+      <p>The bot automatically tracks and stores the following data in MongoDB:</p>
+      <ul>
+        <li>Member joins (when someone joins your server)</li>
+        <li>Member leaves (when someone leaves your server)</li>
+        <li>Daily, weekly, and monthly statistics</li>
+        <li>Historical join/leave data for charts</li>
+      </ul>
+      
+      <h3>3. Initial Data Seeding</h3>
+      <p>For new servers with no historical data, the bot will automatically seed initial data:</p>
+      <pre><code>// To manually seed data for a specific server
+const { seedGuildData } = require('./utils/database');
+seedGuildData('YOUR_GUILD_ID');</code></pre>
+      
+      <h3>4. Verifying Real Data</h3>
+      <p>To verify you're seeing real data:</p>
+      <ol>
+        <li>Look for the "Real Data" badge on your server dashboard</li>
+        <li>Check server logs for database connection messages</li>
+        <li>Test by having a member join/leave and refresh the dashboard</li>
+      </ol>
+      
+      <h3>5. Data Structure</h3>
+      <p>The bot stores data in two main collections:</p>
+      <ul>
+        <li><strong>guildConfigs</strong> - Server configuration settings</li>
+        <li><strong>guildStats</strong> - Join/leave statistics and history</li>
+      </ul>
+      
+      <pre><code>// Example guildStats document structure
+{
+  "guildId": "123456789012345678",
+  "stats": {
+    "joins": {
+      "today": 2,
+      "week": 12,
+      "month": 45,
+      "total": 273
+    },
+    "leaves": {
+      "today": 0,
+      "week": 0,
+      "month": 5,
+      "total": 45
+    },
+    "joinHistory": [
+      { "userId": "user123", "timestamp": "2023-04-15T12:34:56Z" },
+      // More join events...
+    ],
+    "leaveHistory": [
+      { "userId": "user456", "timestamp": "2023-04-10T08:15:30Z" },
+      // More leave events...
+    ],
+    "updatedAt": "2023-04-15T14:30:00Z"
+  }
+}</code></pre>
+      
+      <h3>6. Troubleshooting Real Data Issues</h3>
+      <p>If you're still seeing mock data:</p>
+      <ol>
+        <li>Check MongoDB connection in console logs</li>
+        <li>Verify environment variables are set correctly</li>
+        <li>Ensure the bot has permission to track member join/leave events</li>
+        <li>Try restarting both the bot and dashboard</li>
+        <li>Check if your MongoDB instance has the correct collections</li>
+      </ol>
+      
+      <div class="note">
+        <p><strong>Note:</strong> New servers will have limited historical data until members join and leave over time. The dashboard will show real-time data for new events while building up historical data.</p>
+      </div>
+    </section>
+    
+    <section id="dashboard">
+      <div class="section-header">
+        <div class="section-icon">🖥️</div>
+        <h2>Dashboard Setup</h2>
+      </div>
+      <p>The bot includes a web dashboard for easy configuration and management. Follow these steps to set it up:</p>
+      
+      <h3>Discord OAuth2 Configuration</h3>
+      <ol>
+        <li>Go to the <a href="https://discord.com/developers/applications" target="_blank">Discord Developer Portal</a></li>
+        <li>Select your application</li>
+        <li>Go to the "OAuth2" section in the left sidebar</li>
+        <li>Add the following redirect URL: <code>http://localhost:3000/api/auth/callback/discord</code></li>
+        <li>Save changes</li>
+      </ol>
+      
+      <div class="note">
+        <p><strong>Note:</strong> If you're deploying the dashboard to a production environment, you'll need to add your production URL as well, e.g., <code>https://your-domain.com/api/auth/callback/discord</code></p>
+      </div>
+      
+      <h3>Dashboard Features</h3>
+      <ul>
+        <li><strong>Server Overview:</strong> View statistics about joins and leaves</li>
+        <li><strong>Welcome Messages:</strong> Customize welcome messages with live preview</li>
+        <li><strong>Leave Messages:</strong> Customize leave messages with live preview</li>
+        <li><strong>Role Management:</strong> Configure auto-roles and self-assignable roles</li>
+        <li><strong>Event Settings:</strong> Configure milestone and anniversary events</li>
+        <li><strong>Settings:</strong> Configure bot settings for each server</li>
+      </ul>
+      
+      <h3>Accessing the Dashboard</h3>
+      <p>Once the dashboard is running, you can access it at <code>http://localhost:3000</code>.</p>
+      <p>You'll need to sign in with Discord, and you'll only see servers where you have administrator permissions and where the bot is present.</p>
+    </section>
+      
+    <section id="configuration">
+      <div class="section-header">
+        <div class="section-icon">⚙️</div>
+        <h2>Configuration</h2>
+      </div>
+      <p>The bot is highly customizable through the dashboard or using Discord commands. Here's an overview of the configuration options:</p>
+      
+      <h3>Multi-Server Configuration</h3>
+      <p>The bot supports multiple servers, with each server having its own configuration stored in the MongoDB database. This allows for different settings across all your Discord servers.</p>
+      
+      <h3>Welcome Message Configuration</h3>
+      <p>The bot supports multiple welcome channels with different message formats:</p>
+      <pre><code>welcome: {
+  enabled: true,
+  // Multiple channel support
+  channels: [
+    {
+      id: "WELCOME_CHANNEL_ID",
+      mode: "embed", // "embed" or "text"
+      // Channel-specific settings (optional)
+    }
+  ],
+
+  // Default settings for all welcome channels
+  defaultMode: "embed", // "embed" or "text"
+
+  // Embed Mode Settings
+  embed: {
+    color: "#43B581",
+    title: "Welcome to the Server!",
+    description: "Hey {user}, welcome to our awesome community!",
+    // ... more settings
+  },
+
+  // Text Mode Settings
+  text: "🎉 {user} just joined the server!"
+}</code></pre>
+      
+      <h3>Leave Message Configuration</h3>
+      <p>Similar to welcome messages, leave messages can be configured for multiple channels:</p>
+      <pre><code>leave: {
+  enabled: true,
+  channels: [
+    {
+      id: "LEAVE_CHANNEL_ID",
+      mode: "embed"
+    }
+  ],
+  defaultMode: "embed",
+
+  // Embed settings
+  embed: {
+    // ... configuration options
+  },
+
+  // Text settings
+  text: "👋 {user} has left the server."
+}</code></pre>
+      
+      <h3>Role Assignment</h3>
+      <pre><code>roles: {
+  enabled: true,
+  // Automatically assign these roles to new members
+  autoAssign: ["ROLE_ID_1", "ROLE_ID_2"],
+  // Allow users to self-assign these roles with commands
+  selfAssignable: ["ROLE_ID_3", "ROLE_ID_4"]
+}</code></pre>
+      
+      <h3>Custom Events</h3>
+      <pre><code>events: {
+  // Milestone announcements
+  milestones: {
+    enabled: true,
+    channel: "MILESTONE_CHANNEL_ID",
+    intervals: [100, 500, 1000, 5000, 10000],
+    message: "🎉 We've reached {count} members!"
+  },
+  // Member anniversary announcements
+  anniversaries: {
+    enabled: true,
+    channel: "ANNIVERSARY_CHANNEL_ID",
+    intervals: [30, 90, 180, 365], // Days
+    message: "🎂 Happy {duration} day anniversary to {user}!"
+  }
+}</code></pre>
+      
+      <h3>Logging</h3>
+      <pre><code>logging: {
+  enabled: true,
+  channel: "LOG_CHANNEL_ID",
+  events: {
+    memberJoin: true,
+    memberLeave: true,
+    memberBan: true,
+    memberUnban: true,
+    memberRoleChange: true
+  }
+}</code></pre>
+      
+      <h3>MongoDB Configuration</h3>
+      <p>The bot uses MongoDB for persistent storage of server configurations:</p>
+      <pre><code># Database Configuration in .env file
+USE_DATABASE=true
+MONGODB_URI=mongodb://localhost:27017/discordbot
+MONGODB_DB_NAME=discordbot</code></pre>
+      
+      <p>When MongoDB is enabled, all server configurations will be stored in the database and loaded when the bot starts. This ensures that your settings persist even if the bot restarts.</p>
+      
+      <div class="note">
+        <p><strong>Note:</strong> If MongoDB is not available or disabled, the bot will fall back to in-memory configuration storage.</p>
+      </div>
+    </section>
+    
+    <section id="commands">
+      <div class="section-header">
+        <div class="section-icon">🔧</div>
+        <h2>Commands</h2>
+      </div>
+      <p>The bot supports both slash commands and traditional prefix commands (if enabled).</p>
+      
+      <h3>Welcome Commands</h3>
+      <table class="command-table">
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Description</th>
+            <th>Usage</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>/welcome test</td>
+            <td>Test the welcome message</td>
+            <td>/welcome test [mode] [channel]</td>
+            <td><span class="tag tag-slash">Slash</span></td>
+          </tr>
+          <tr>
+            <td>/welcome toggle</td>
+            <td>Toggle welcome messages on/off</td>
+            <td>/welcome toggle</td>
+            <td><span class="tag tag-slash">Slash</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+          <tr>
+            <td>/welcome channel</td>
+            <td>Add or remove a welcome channel</td>
+            <td>/welcome channel [add|remove] [#channel] [mode]</td>
+            <td><span class="tag tag-slash">Slash</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+          <tr>
+            <td>/welcome edit</td>
+            <td>Edit welcome message settings</td>
+            <td>/welcome edit [setting] [value]</td>
+            <td><span class="tag tag-slash">Slash</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+          <tr>
+            <td>/welcome canvas</td>
+            <td>Configure canvas image generation</td>
+            <td>/welcome canvas [enabled] [mode] [gradient]</td>
+            <td><span class="tag tag-slash">Slash</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+          <tr>
+            <td>!welcome test</td>
+            <td>Test the welcome message</td>
+            <td>!welcome test [mode]</td>
+            <td><span class="tag tag-prefix">Prefix</span></td>
+          </tr>
+          <tr>
+            <td>!welcome toggle</td>
+            <td>Toggle welcome messages on/off</td>
+            <td>!welcome toggle</td>
+            <td><span class="tag tag-prefix">Prefix</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+          <tr>
+            <td>!welcome channel</td>
+            <td>Add or remove a welcome channel</td>
+            <td>!welcome channel [add|remove] [#channel] [mode]</td>
+            <td><span class="tag tag-prefix">Prefix</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <h3>Leave Commands</h3>
+      <table class="command-table">
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Description</th>
+            <th>Usage</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>/leave test</td>
+            <td>Test the leave message</td>
+            <td>/leave test [mode] [channel]</td>
+            <td><span class="tag tag-slash">Slash</span></td>
+          </tr>
+          <tr>
+            <td>/leave toggle</td>
+            <td>Toggle leave messages on/off</td>
+            <td>/leave toggle</td>
+            <td><span class="tag tag-slash">Slash</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+          <tr>
+            <td>/leave channel</td>
+            <td>Add or remove a leave channel</td>
+            <td>/leave channel [add|remove] [#channel] [mode]</td>
+            <td><span class="tag tag-slash">Slash</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+          <tr>
+            <td>/leave edit</td>
+            <td>Edit leave message settings</td>
+            <td>/leave edit [setting] [value]</td>
+            <td><span class="tag tag-slash">Slash</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+          <tr>
+            <td>/leave canvas</td>
+            <td>Configure canvas image generation</td>
+            <td>/leave canvas [enabled] [mode] [gradient]</td>
+            <td><span class="tag tag-slash">Slash</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+          <tr>
+            <td>!leave test</td>
+            <td>Test the leave message</td>
+            <td>!leave test [mode]</td>
+            <td><span class="tag tag-prefix">Prefix</span></td>
+          </tr>
+          <tr>
+            <td>!leave toggle</td>
+            <td>Toggle leave messages on/off</td>
+            <td>!leave toggle</td>
+            <td><span class="tag tag-prefix">Prefix</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+          <tr>
+            <td>!leave channel</td>
+            <td>Add or remove a leave channel</td>
+            <td>!leave channel [add|remove] [#channel] [mode]</td>
+            <td><span class="tag tag-prefix">Prefix</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <h3>Configuration Commands</h3>
+      <table class="command-table">
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Description</th>
+            <th>Usage</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>/config reload</td>
+            <td>Reload the configuration file</td>
+            <td>/config reload</td>
+            <td><span class="tag tag-slash">Slash</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+          <tr>
+            <td>/config prefix</td>
+            <td>Change the command prefix</td>
+            <td>/config prefix [new-prefix]</td>
+            <td><span class="tag tag-slash">Slash</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+          <tr>
+            <td>/config toggleprefix</td>
+            <td>Toggle prefix commands on/off</td>
+            <td>/config toggleprefix</td>
+            <td><span class="tag tag-slash">Slash</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+          <tr>
+            <td>!config reload</td>
+            <td>Reload the configuration file</td>
+            <td>!config reload</td>
+            <td><span class="tag tag-prefix">Prefix</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+          <tr>
+            <td>!config prefix</td>
+            <td>Change the command prefix</td>
+            <td>!config prefix [new-prefix]</td>
+            <td><span class="tag tag-prefix">Prefix</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+          <tr>
+            <td>!config toggleprefix</td>
+            <td>Toggle prefix commands on/off</td>
+            <td>!config toggleprefix</td>
+            <td><span class="tag tag-prefix">Prefix</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <h3>Role Commands</h3>
+      <table class="command-table">
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Description</th>
+            <th>Usage</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>/role add</td>
+            <td>Add a self-assignable role to yourself</td>
+            <td>/role add [role]</td>
+            <td><span class="tag tag-slash">Slash</span></td>
+          </tr>
+          <tr>
+            <td>/role remove</td>
+            <td>Remove a self-assignable role from yourself</td>
+            <td>/role remove [role]</td>
+            <td><span class="tag tag-slash">Slash</span></td>
+          </tr>
+          <tr>
+            <td>/role list</td>
+            <td>List all self-assignable roles</td>
+            <td>/role list</td>
+            <td><span class="tag tag-slash">Slash</span></td>
+          </tr>
+          <tr>
+            <td>/role auto-add</td>
+            <td>Add a role to be automatically assigned</td>
+            <td>/role auto-add [role]</td>
+            <td><span class="tag tag-slash">Slash</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+          <tr>
+            <td>/role auto-remove</td>
+            <td>Remove a role from auto-assignment</td>
+            <td>/role auto-remove [role]</td>
+            <td><span class="tag tag-slash">Slash</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+          <tr>
+            <td>/role self-add</td>
+            <td>Add a role to self-assignable list</td>
+            <td>/role self-add [role]</td>
+            <td><span class="tag tag-slash">Slash</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+          <tr>
+            <td>/role self-remove</td>
+            <td>Remove a role from self-assignable list</td>
+            <td>/role self-remove [role]</td>
+            <td><span class="tag tag-slash">Slash</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+          <tr>
+            <td>/role enable</td>
+            <td>Enable/disable auto-role functionality</td>
+            <td>/role enable [true|false]</td>
+            <td><span class="tag tag-slash">Slash</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <h3>Database Commands</h3>
+      <table class="command-table">
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Description</th>
+            <th>Usage</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>/database seed</td>
+            <td>Seed initial data for testing</td>
+            <td>/database seed</td>
+            <td><span class="tag tag-slash">Slash</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+          <tr>
+            <td>/database reset</td>
+            <td>Reset statistics counters</td>
+            <td>/database reset [daily|weekly|monthly|all]</td>
+            <td><span class="tag tag-slash">Slash</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+          <tr>
+            <td>/database status</td>
+            <td>Check database connection status</td>
+            <td>/database status</td>
+            <td><span class="tag tag-slash">Slash</span> <span class="tag tag-admin">Admin</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    
+    <section id="features">
+      <div class="section-header">
+        <div class="section-icon">✨</div>
+        <h2>Features</h2>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h4>Multiple Channel Support</h4>
+          <p>Send welcome and leave messages to multiple channels with different formats.</p>
+        </div>
+        <div class="feature-card">
+          <h4>Customizable Embeds</h4>
+          <p>Fully customize embed colors, titles, descriptions, images, thumbnails, and footers.</p>
+        </div>
+        <div class="feature-card">
+          <h4>Text Mode</h4>
+          <p>Option to use simple text messages instead of embeds for a cleaner look.</p>
+        </div>
+        <div class="feature-card">
+          <h4>Variable Placeholders</h4>
+          <p>Use variables like {user}, {count}, and {duration} in your messages.</p>
+        </div>
+        <div class="feature-card">
+          <h4>Role Management</h4>
+          <p>Auto-assign roles to new members and allow self-assignable roles.</p>
+        </div>
+        <div class="feature-card">
+          <h4>Milestone Announcements</h4>
+          <p>Celebrate member count milestones with custom announcements.</p>
+        </div>
+        <div class="feature-card">
+          <h4>Member Anniversaries</h4>
+          <p>Recognize members on their server join anniversaries.</p>
+        </div>
+        <div class="feature-card">
+          <h4>Event Logging</h4>
+          <p>Detailed logging of member joins, leaves, bans, and role changes.</p>
+        </div>
+        <div class="feature-card">
+          <h4>Dual Command System</h4>
+          <p>Support for both slash commands and traditional prefix commands.</p>
+        </div>
+        <div class="feature-card">
+          <h4>Permission Controls</h4>
+          <p>Admin-only commands for configuration and management.</p>
+        </div>
+        <div class="feature-card">
+          <h4>Live Configuration</h4>
+          <p>Update settings without restarting the bot.</p>
+        </div>
+        <div class="feature-card">
+          <h4>Canvas Image Generation</h4>
+          <p>Create beautiful welcome cards with custom gradients and user avatars.</p>
+        </div>
+        <div class="feature-card">
+          <h4>Multi-Server Support</h4>
+          <p>Configure different settings for each Discord server.</p>
+        </div>
+        <div class="feature-card">
+          <h4>Web Dashboard</h4>
+          <p>Manage all settings through an intuitive web interface.</p>
+        </div>
+        <div class="feature-card">
+          <h4>Real-Time Statistics</h4>
+          <p>Track and display actual join/leave data with MongoDB integration.</p>
+        </div>
+        <div class="feature-card">
+          <h4>Rate Limiting</h4>
+          <p>Prevent abuse with Upstash Redis rate limiting.</p>
+        </div>
+      </div>
+    </section>
+    
+    <section id="customization">
+      <div class="section-header">
+        <div class="section-icon">🎨</div>
+        <h2>Customization</h2>
+      </div>
+      <p>The bot offers extensive customization options for welcome and leave messages.</p>
+      
+      <h3>Embed Customization</h3>
+      <p>For embed messages, you can customize:</p>
+      <ul>
+        <li><strong>Color:</strong> Set the color bar of the embed using hex codes</li>
+        <li><strong>Title:</strong> Customize the embed title</li>
+        <li><strong>Description:</strong> Set the main message text</li>
+        <li><strong>Author:</strong> Configure the author name and icon</li>
+        <li><strong>Image:</strong> Add a large image to the embed</li>
+        <li><strong>Thumbnail:</strong> Add a smaller image in the corner</li>
+        <li><strong>Fields:</strong> Add multiple fields with name/value pairs</li>
+        <li><strong>Footer:</strong> Add footer text and icon</li>
+        <li><strong>Timestamp:</strong> Toggle timestamp display</li>
+      </ul>
+      
+      <h3>Example Embed Configuration</h3>
+      <pre><code>embed: {
+  color: "#43B581", // Green color
+  title: "Welcome to the Server!",
+  description: "Hey {user}, welcome to our awesome community!",
+  showTimestamp: true,
+  showMemberCount: true,
+  image: "https://your-welcome-image.png",
+  thumbnail: "user", // "user" to use user's avatar
+  author: {
+    name: "{server}",
+    icon: "server", // "server" to use server icon
+  },
+  fields: [
+    {
+      name: "Member Count",
+      value: "You are member #{count}",
+      inline: true
+    },
+    {
+      name: "Joined At",
+      value: "{joindate}",
+      inline: true
+    }
+  ],
+  footer: {
+    text: "You are member #{count}",
+    icon: "" // URL to footer icon
+  }
+}</code></pre>
+      
+      <h3>Text Mode Customization</h3>
+      <p>For text messages, you can use a simple string with variables:</p>
+      <pre><code>text: "🎉 {user} just joined the server! Welcome to our community! You are member #{count}."</code></pre>
+      
+      <h3>Channel-Specific Settings</h3>
+      <p>You can override default settings for specific channels:</p>
+      <pre><code>channels: [
+  {
+    id: "CHANNEL_ID_1",
+    mode: "embed",
+    settings: {
+      // Override any settings from the default embed
+      embed: {
+        color: "#FF0000", // Different color for this channel
+        title: "VIP Welcome!" // Different title
+      }
+    }
+  },
+  {
+    id: "CHANNEL_ID_2",
+    mode: "text",
+    settings: {
+      text: "A different welcome message for this channel: {user} joined!"
+    }
+  }
+]</code></pre>
+    </section>
+    
+    <section id="variables">
+      <div class="section-header">
+        <div class="section-icon">📝</div>
+        <h2>Available Variables</h2>
+      </div>
+      <p>You can use these variables in your welcome and leave messages:</p>
+      
+      <table class="command-table">
+        <thead>
+          <tr>
+            <th>Variable</th>
+            <th>Description</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{user}</td>
+            <td>User's tag (username#discriminator)</td>
+            <td>JohnDoe#1234</td>
+          </tr>
+          <tr>
+            <td>{usermention}</td>
+            <td>Mentions the user</td>
+            <td>@JohnDoe</td>
+          </tr>
+          <tr>
+            <td>{userid}</td>
+            <td>User's Discord ID</td>
+            <td>123456789012345678</td>
+          </tr>
+          <tr>
+            <td>{username}</td>
+            <td>User's username without discriminator</td>
+            <td>JohnDoe</td>
+          </tr>
+          <tr>
+            <td>{server}</td>
+            <td>Server name</td>
+            <td>My Awesome Server</td>
+          </tr>
+          <tr>
+            <td>{serverid}</td>
+            <td>Server ID</td>
+            <td>123456789012345678</td>
+          </tr>
+          <tr>
+            <td>{count}</td>
+            <td>Current member count</td>
+            <td>142</td>
+          </tr>
+          <tr>
+            <td>{joindate}</td>
+            <td>Formatted join date</td>
+            <td>April 29th, 2023</td>
+          </tr>
+          <tr>
+            <td>{duration}</td>
+            <td>Time in server (for leave messages)</td>
+            <td>42 days</td>
+          </tr>
+          <tr>
+            <td>{avatar}</td>
+            <td>URL to user's avatar</td>
+            <td>https://cdn.discordapp.com/avatars/...</td>
+          </tr>
+          <tr>
+            <td>{servericon}</td>
+            <td>URL to server icon</td>
+            <td>https://cdn.discordapp.com/icons/...</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    
+    <section id="troubleshooting">
+      <div class="section-header">
+        <div class="section-icon">🔍</div>
+        <h2>Troubleshooting</h2>
+      </div>
+      
+      <h3>Common Issues</h3>
+      
+      <div class="feature-card">
+        <h4>Dashboard Shows Mock Data</h4>
+        <p><strong>Possible causes:</strong></p>
+        <ul>
+          <li>MongoDB is not properly connected</li>
+          <li>USE_DATABASE environment variable is not set to true</li>
+          <li>No data has been recorded yet for your server</li>
+        </ul>
+        <p><strong>Solution:</strong> Verify MongoDB connection, check environment variables, and ensure the bot is recording join/leave events. You can use the <code>/database seed</code> command to generate initial test data.</p>
+      </div>
+      
+      <div class="feature-card">
+        <h4>Bot Not Sending Messages</h4>
+        <p><strong>Possible causes:</strong></p>
+        <ul>
+          <li>Bot doesn't have permission to send messages in the channel</li>
+          <li>Channel IDs in config are incorrect</li>
+          <li>Welcome/leave messages are disabled in config</li>
+        </ul>
+        <p><strong>Solution:</strong> Check channel permissions, verify channel IDs, and ensure welcome/leave messages are enabled.</p>
+      </div>
+      
+      <div class="feature-card">
+        <h4>Missing Config File Error</h4>
+        <p><strong>Possible causes:</strong></p>
+        <ul>
+          <li>config.js file is missing or incorrectly named</li>
+          <li>Running commands from the wrong directory</li>
+        </ul>
+        <p><strong>Solution:</strong> Ensure config.js exists in the root directory and you're running commands from the correct location.</p>
+      </div>
+      
+      <div class="feature-card">
+        <h4>Slash Commands Not Working</h4>
+        <p><strong>Possible causes:</strong></p>
+        <ul>
+          <li>Slash commands not deployed</li>
+          <li>Incorrect client ID or guild ID</li>
+          <li>Bot doesn't have applications.commands scope</li>
+        </ul>
+        <p><strong>Solution:</strong> Run <code>npm run deploy</code> to deploy slash commands, verify IDs, and check bot permissions.</p>
+      </div>
+      
+      <div class="feature-card">
+        <h4>Role Assignment Not Working</h4>
+        <p><strong>Possible causes:</strong></p>
+        <ul>
+          <li>Bot doesn't have Manage Roles permission</li>
+          <li>Bot's role is lower than the roles it's trying to assign</li>
+          <li>Role IDs in config are incorrect</li>
+        </ul>
+        <p><strong>Solution:</strong> Check bot permissions, ensure bot's role is higher in the hierarchy, and verify role IDs.</p>
+      </div>
+
+      <div class="feature-card">
+        <h4>MongoDB Connection Issues</h4>
+        <p><strong>Possible causes:</strong></p>
+        <ul>
+          <li>MongoDB server is not running</li>
+          <li>Connection URI is incorrect</li>
+          <li>Network issues preventing connection</li>
+        </ul>
+        <p><strong>Solution:</strong> Verify MongoDB is running, check connection URI, and ensure network connectivity. The bot will fall back to in-memory storage if MongoDB is unavailable.</p>
+      </div>
+      
+      <div class="feature-card">
+        <h4>Dashboard Not Loading</h4>
+        <p><strong>Possible causes:</strong></p>
+        <ul>
+          <li>NextAuth environment variables not set correctly</li>
+          <li>Discord OAuth2 redirect URL not configured</li>
+          <li>MongoDB connection issues</li>
+        </ul>
+        <p><strong>Solution:</strong> Check environment variables, verify OAuth2 configuration, and ensure MongoDB is accessible.</p>
+      </div>
+      
+      <div class="feature-card">
+        <h4>NextAuth CSRF Error</h4>
+        <p><strong>Possible causes:</strong></p>
+        <ul>
+          <li>NEXTAUTH_SECRET not set or incorrect</li>
+          <li>NEXTAUTH_URL not matching the actual URL</li>
+          <li>Cookie settings issues</li>
+        </ul>
+        <p><strong>Solution:</strong> Set a strong NEXTAUTH_SECRET, ensure NEXTAUTH_URL matches your actual URL, and check cookie settings in the NextAuth configuration.</p>
+      </div>
+      
+      <h3>Getting Help</h3>
+      <p>If you're still experiencing issues, you can:</p>
+      <ul>
+        <li>Check the console for error messages</li>
+        <li>Open an issue on the GitHub repository</li>
+        <li>Join our support Discord server for assistance</li>
+      </ul>
+    </section>
+  </div>
+  
+  <footer>
+    <div class="container">
+      <p>Discord Welcome & Leave Bot &copy; 2023</p>
+      <p>Created with ❤️ by unt1tle</p>
+      <div class="hero-buttons">
+        <a href="https://github.com/yourusername/discord-welcome-bot" class="btn">GitHub Repository</a>
+        <a href="https://discord.gg/your-invite" class="btn">Join Support Server</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
+

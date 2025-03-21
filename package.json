@@ -1,0 +1,39 @@
+{
+  "name": "discord-welcome-bot",
+  "version": "1.0.0",
+  "description": "A customizable Discord welcome and leave message bot with dashboard",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js",
+    "dev": "nodemon bot.js",
+    "deploy": "node deploy-commands.js",
+    "dashboard": "cd dashboard && npm run dev",
+    "start:all": "concurrently \"npm run dev\" \"npm run dashboard\"",
+    "install:all": "npm install && cd dashboard && npm install",
+    "build": "cd dashboard && npm run build",
+    "lint": "eslint .",
+    "start:unified": "node start.js"
+  },
+  "keywords": ["discord", "bot", "welcome", "leave", "dashboard"],
+  "author": "unt1tle",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "discord.js": "^14.11.0",
+    "dotenv": "^16.3.1",
+    "date-fns": "^2.30.0",
+    "mongodb": "^5.7.0",
+    "node-cron": "^3.0.2",
+    "@upstash/redis": "^1.28.4",
+    "@upstash/ratelimit": "^1.0.1",
+    "concurrently": "^8.2.2"
+  },
+  "optionalDependencies": {
+    "canvas": "^2.11.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "nodemon": "^3.1.0"
+  }
+}
+
