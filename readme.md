@@ -4,6 +4,8 @@
 
 This Discord bot provides welcome and leave messages, auto-role assignment, and server statistics tracking. The bot includes a web dashboard for easy configuration and monitoring.
 
+### Check out documentation.html for more thorough guidance
+
 ## Features
 
 - **Welcome Messages**: Customizable messages when users join your server
