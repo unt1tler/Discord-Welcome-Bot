@@ -94,6 +94,20 @@ async function saveGuildConfig(guildId, config) {
 }
 
 /**
+ * Get all guild configurations from the database
+ * @returns {Promise<Array>} Array of guild configurations
+ */
+async function getAllGuildConfigs() {
+  try {
+    const { db } = await connectToDatabase()
+    return await db.collection("guildConfigs").find({}).toArray()
+  } catch (error) {
+    console.error("Error getting all guild configs:", error)
+    return []
+  }
+}
+
+/**
  * Get guild statistics from the database
  * @param {string} guildId The guild ID
  * @returns {Promise<Object>} The guild statistics
@@ -415,6 +429,34 @@ async function seedGuildData(guildId) {
   }
 }
 
+/**
+ * Initialize guild configuration in the database
+ * @param {string} guildId The guild ID
+ * @param {Object} defaultConfig The default configuration
+ * @returns {Promise<Object>} The initialized guild configuration
+ */
+async function initGuildConfig(guildId, defaultConfig) {
+  try {
+    const { db } = await connectToDatabase()
+    const now = new Date()
+
+    // Add timestamps and guildId to the config
+    const config = {
+      ...defaultConfig,
+      guildId,
+      createdAt: now,
+      updatedAt: now,
+    }
+
+    await db.collection("guildConfigs").updateOne({ guildId }, { $setOnInsert: config }, { upsert: true })
+
+    return config
+  } catch (error) {
+    console.error(`Error initializing guild config for ${guildId}:`, error)
+    return defaultConfig
+  }
+}
+
 module.exports = {
   connectToDatabase,
   getGuildConfig,
@@ -427,5 +469,7 @@ module.exports = {
   resetWeeklyStats,
   resetMonthlyStats,
   seedGuildData,
+  getAllGuildConfigs,
+  initGuildConfig,
 }
 
