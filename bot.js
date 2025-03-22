@@ -87,7 +87,7 @@ client.once(Events.ClientReady, async () => {
 
   if (useDatabase) {
     try {
-      await db.connect()
+      await db.connectToDatabase()
       console.log("Connected to MongoDB database")
 
       // Load all guild configs from database
