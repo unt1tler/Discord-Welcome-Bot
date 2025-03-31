@@ -25,7 +25,7 @@ module.exports = {
       await sendWelcomeMessage(member)
 
       // Connect to MongoDB
-      let client = null // Declare client variable
+      let client = null 
       let guildConfig
 
       if (process.env.MONGODB_URI) {
